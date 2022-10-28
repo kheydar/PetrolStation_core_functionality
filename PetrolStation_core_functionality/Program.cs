@@ -19,13 +19,12 @@ namespace PetrolStation
         static void Main(string[] args)
         {
             createVechile = new Timer(newVehicle);
-            refuel = new Timer(refuelTime);
-
             createVechile.Enabled = true;
             createVechile.AutoReset = true;
             createVechile.Elapsed += VehicleTimer;
             createVechile.Start();
 
+            refuel = new Timer(refuelTime);
             refuel.Enabled = true;
             refuel.AutoReset = true;
             refuel.Elapsed += RefuelTimer;
@@ -48,10 +47,9 @@ namespace PetrolStation
             litresDispensed += fuelDispensed;
             carsServed += 1;
             avaliablePumps += 1;
-            Console.WriteLine($"{carsServed} cars served and {litresDispensed} total fuel, {avaliablePumps} pumps avaliable");
+            Console.WriteLine($"{carsServed} cars served and {litresDispensed} litres of fuel, {avaliablePumps} pumps avaliable");
         }
 
     }
-
 
 }
