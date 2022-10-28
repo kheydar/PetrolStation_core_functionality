@@ -1,51 +1,57 @@
 ﻿using System;
 using System.Timers;
+using Timer = System.Timers.Timer;
 
-//int newVehicle = 1500;
-//double litresDispensed = 0;
-//int fuelProcess = 8000;
-//int avaliablePupms = 9;
-
-
-public class Example
+namespace PetrolStation
 {
-    private static System.Timers.Timer aTimer;
-
-    public static void Main()
+    public class Program
     {
-        SetTimer();
+        static Timer createVechile;
+        static Timer refuel;
 
-        Console.WriteLine("\nPress the Enter key to exit the application...\n");
-        Console.WriteLine("The application started at {0:HH:mm:ss.fff}", DateTime.Now);
-        Console.ReadLine();
-        aTimer.Stop();
-        aTimer.Dispose();
+        static int newVehicle = 1500;
+        static int refuelTime = 8000;
+        static double litresDispensed = 0;
+        static int avaliablePumps = 9;
+        static int carsCreated = 0;
+        static int carsServed = 0;
 
-        //Console.WriteLine("Terminating the application...");
-    }
-
-    private static void SetTimer()
-    {
-        // Create a timer with a two second interval.
-        aTimer = new System.Timers.Timer(1500);
-        // Hook up the Elapsed event for the timer. 
-        aTimer.Elapsed += OnTimedEvent;
-        aTimer.AutoReset = true;
-        aTimer.Enabled = true;
-    }
-
-    private static void OnTimedEvent(Object source, ElapsedEventArgs e)
-    {
-        int avaliablePupms = 9;
-        //Console.WriteLine("New vechile created at {0:HH:mm:ss.fff}", e.SignalTime);
-        
-
-        do
+        static void Main(string[] args)
         {
-            Console.WriteLine("New vehicle created, select which pump to use");
-            int pumpChoice = Int32.Parse(Console.ReadLine());
+            createVechile = new Timer(newVehicle);
+            refuel = new Timer(refuelTime);
+
+            createVechile.Enabled = true;
+            createVechile.AutoReset = true;
+            createVechile.Elapsed += VehicleTimer;
+            createVechile.Start();
+
+            refuel.Enabled = true;
+            refuel.AutoReset = true;
+            refuel.Elapsed += RefuelTimer;
+            refuel.Start();
+
+            Console.ReadKey();
+
         }
 
-        while (avaliablePupms >=1);
+        private static void VehicleTimer(Object source, ElapsedEventArgs e)
+        {
+            carsCreated += 1;
+            avaliablePumps -= 1;
+            Console.WriteLine($"{carsCreated} cars created, {avaliablePumps} pumps avaliable");
+        }
+
+        private static void RefuelTimer(Object source, ElapsedEventArgs e)
+        {
+            double fuelDispensed = 1.5 * 8;
+            litresDispensed += fuelDispensed;
+            carsServed += 1;
+            avaliablePumps += 1;
+            Console.WriteLine($"{carsServed} cars served and {litresDispensed} total fuel, {avaliablePumps} pumps avaliable");
+        }
+
     }
+
+
 }
