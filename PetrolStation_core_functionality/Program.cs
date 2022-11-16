@@ -6,39 +6,56 @@ namespace PetrolStation
 {
     public class Program
     {
-        static Timer createVechile;
-        static Timer refuel;
-
+        
         static int newVehicle = 1500;
         static int refuelTime = 8000;
         static double litresDispensed = 0;
         static int avaliablePumps = 9;
         static int carsCreated = 0;
         static int carsServed = 0;
+        static bool running = true;
+
+        private static System.Timers.Timer createVechile;
+        private static System.Timers.Timer refuel;
 
         static void Main(string[] args)
         {
-            createVechile = new Timer(newVehicle);
+            VechileTimer();
+            Refuel();
+
+            do
+            {
+                Console.WriteLine("New vehicle arrived, please select pump");
+                string userInput = Console.ReadLine();
+                avaliablePumps -= 1;
+                Console.WriteLine($"Vechile assigned to pump {userInput}, {avaliablePumps} pumps avaliable");
+                
+            } while (avaliablePumps > 0);
+        }
+
+
+        private static void VechileTimer()
+        {
+            createVechile = new System.Timers.Timer(newVehicle);
             createVechile.Enabled = true;
             createVechile.AutoReset = true;
             createVechile.Elapsed += VehicleTimer;
             createVechile.Start();
+        }
 
+        private static void Refuel()
+        {
             refuel = new Timer(refuelTime);
             refuel.Enabled = true;
             refuel.AutoReset = true;
             refuel.Elapsed += RefuelTimer;
             refuel.Start();
-
-            Console.ReadKey();
-
         }
+
 
         private static void VehicleTimer(Object source, ElapsedEventArgs e)
         {
             carsCreated += 1;
-            avaliablePumps -= 1;
-            Console.WriteLine($"{carsCreated} cars created, {avaliablePumps} pumps avaliable");
         }
 
         private static void RefuelTimer(Object source, ElapsedEventArgs e)
@@ -47,7 +64,7 @@ namespace PetrolStation
             litresDispensed += fuelDispensed;
             carsServed += 1;
             avaliablePumps += 1;
-            Console.WriteLine($"{carsServed} cars served and {litresDispensed} litres of fuel, {avaliablePumps} pumps avaliable");
+            Console.WriteLine($"{carsServed} cars served; {litresDispensed} litres of fuel sold, {avaliablePumps} pumps avaliable");
         }
 
     }
