@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Timers;
+using System.Threading;
 
 namespace PetrolStation
 {
@@ -15,6 +16,8 @@ namespace PetrolStation
         private static bool running = true;
         private static int carsQueue = 0;
         private static int carsLeftEarly = 0;
+        private static double cost;
+        private static double commision;
 
         private static System.Timers.Timer createVechile;
         private static System.Timers.Timer refuel;
@@ -26,25 +29,39 @@ namespace PetrolStation
 
             do
             {
-                Console.WriteLine("New vehicle arrived, please select pump");
+                while (avaliablePumps==0)
+                {
+                    Console.WriteLine("Waiting for a free pump...");
+                    Thread.Sleep(2000);
+                }
+
+                Console.WriteLine("New vehicle arrived, please select pump or type 'quit' to close the program'");
                 string userInput = Console.ReadLine();
+
+                if (userInput.ToLower() == "quit")
+                {
+                    running = false;
+                }
+
                 avaliablePumps -= 1;
+                Console.WriteLine("\n");
                 Console.WriteLine($"Vechile assigned to pump {userInput}, {avaliablePumps} pumps avaliable");
                 Console.WriteLine("\n");
                 Console.WriteLine(new string('#', 100));
-                //Console.WriteLine("\n");
                 //Console.Clear();
 
                 Console.WriteLine($"Queue: {carsQueue} \n" +
                     $"Cars: {carsCreated} \n"+
                     $"Litres sold: {litresDispensed} \n" +
-                    $"Cost: \n" +
-                    $"1%: \n" +
+                    $"Cost: £{cost}\n" +
+                    $"1%: £{commision}\n" +
                     $"Vehicles serviced: {carsServed} \n" +
-                    $"Avaliable pumps: {avaliablePumps} \n" +
-                    $"Left early: \n");
+                    $"Avaliable pumps: {avaliablePumps} \n"
+                    //+$"Left early: \n"
+                    );
 
-            } while (avaliablePumps > 0);
+
+            } while (running);
         }
 
 
@@ -77,10 +94,11 @@ namespace PetrolStation
         {
             double fuelDispensed = 1.5 * 8;
             litresDispensed += fuelDispensed;
+            cost = litresDispensed * 1.5;
+            commision = cost * 0.01;
             carsServed += 1;
             avaliablePumps += 1;
             carsQueue -= 1;
-            //Console.WriteLine($"{carsServed} cars served; {litresDispensed} litres of fuel sold, {avaliablePumps} pumps avaliable");
         }
 
     }
