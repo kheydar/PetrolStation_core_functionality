@@ -6,9 +6,9 @@ namespace PetrolStation
 {
     public class Program
     {
-
-        private static int newVehicle = 1500;
-        private static int refuelTime = 8000;
+        Random random = new Random();
+        private static int newVehicle;
+        private static int refuelTime;
         private static double litresDispensed = 0;
         private static int avaliablePumps = 9;
         private static int carsCreated = 0;
@@ -17,16 +17,21 @@ namespace PetrolStation
         private static bool correctPin;
         private static int carsQueue = 0;
         private static int carsLeftEarly = 0;
+        private static double fuelCost = 1.5;
         private static double cost;
         private static double commision;
+        
 
         private static System.Timers.Timer createVechile;
         private static System.Timers.Timer refuel;
 
         static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            
+            Random random = new Random();
+            newVehicle = random.Next(1500, 2200);
+            refuelTime = random.Next(3000, 5000);
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;        
             Console.WriteLine("Welcome to Broken Petrol Ltd");
             Console.WriteLine("\n\n");
             Console.WriteLine("Please login to continue");
@@ -78,6 +83,13 @@ namespace PetrolStation
                         }
 
                         Console.ResetColor();
+
+                        //newVehicle = random.Next(1500, 2200);
+                        //refuelTime = random.Next(3000, 5000);
+
+                        Console.WriteLine($"New vehicle after {newVehicle} \n" +
+                        $"Refuel in {refuelTime}\n");
+
                         Console.WriteLine("New vehicle arrived, please select pump or type 'quit' to close the program'");
                         string userInput = Console.ReadLine();
 
@@ -93,6 +105,7 @@ namespace PetrolStation
                         Console.WriteLine(new string('#', 100));
                         //Console.Clear();
 
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
                         Console.WriteLine($"Queue: {carsQueue} \n" +
                             $"Cars: {carsCreated} \n"+
                             $"Litres sold: {litresDispensed} \n" +
@@ -135,9 +148,9 @@ namespace PetrolStation
 
         private static void RefuelTimer(Object source, ElapsedEventArgs e)
         {
-            double fuelDispensed = 1.5 * 8;
+            double fuelDispensed = 1.5 * (refuelTime/1000);
             litresDispensed += fuelDispensed;
-            cost = litresDispensed * 1.5;
+            cost = litresDispensed * fuelCost;
             commision = cost * 0.01;
             carsServed += 1;
             avaliablePumps += 1;
