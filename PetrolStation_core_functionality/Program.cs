@@ -20,8 +20,7 @@ namespace PetrolStation
         private static double fuelCost = 1.5;
         private static double cost;
         private static double commision;
-        
-
+       
         private static System.Timers.Timer createVechile;
         private static System.Timers.Timer refuel;
 
@@ -51,7 +50,6 @@ namespace PetrolStation
             {
                 do
                 {
-                   
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n");
                     Console.WriteLine("Incorrect pin, please try again...");
@@ -87,8 +85,8 @@ namespace PetrolStation
                         //newVehicle = random.Next(1500, 2200);
                         //refuelTime = random.Next(3000, 5000);
 
-                        Console.WriteLine($"New vehicle after {newVehicle} \n" +
-                        $"Refuel in {refuelTime}\n");
+                        //Console.WriteLine($"New vehicle after {newVehicle} \n" +
+                        //$"Refuel in {refuelTime}\n");
 
                         Console.WriteLine("New vehicle arrived, please select pump or type 'quit' to close the program'");
                         string userInput = Console.ReadLine();
@@ -103,7 +101,6 @@ namespace PetrolStation
                         Console.WriteLine($"Vechile assigned to pump {userInput}, {avaliablePumps} pumps avaliable");
                         Console.WriteLine("\n");
                         Console.WriteLine(new string('#', 100));
-                        //Console.Clear();
 
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
                         Console.WriteLine($"Queue: {carsQueue} \n" +
@@ -115,7 +112,6 @@ namespace PetrolStation
                             $"Avaliable pumps: {avaliablePumps} \n"
                             //+$"Left early: \n"
                             );
-
 
                     } while (running);
                 }
@@ -139,7 +135,6 @@ namespace PetrolStation
             refuel.Start();
         }
 
-
         private static void VehicleTimer(Object source, ElapsedEventArgs e)
         {
             carsCreated += 1;
@@ -153,10 +148,15 @@ namespace PetrolStation
             cost = litresDispensed * fuelCost;
             commision = cost * 0.01;
             carsServed += 1;
-            avaliablePumps += 1;
-            carsQueue -= 1;
+            if (avaliablePumps < 9)
+            {
+                avaliablePumps += 1;
+            }
+
+            if (carsQueue > 0)
+            {
+                carsQueue -= 1;
+            }
         }
-
-
     }
 }
