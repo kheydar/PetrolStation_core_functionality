@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Timers;
 using System.Threading;
+using System.IO;
 
 namespace PetrolStation
 {
     public class Program
     {
-        //private static int newVehicle;
-        //private static int refuelTime;
         private static double litresDispensed = 0;
         private static int avaliablePumps = 9;
         private static int carsCreated = 0;
@@ -19,20 +18,20 @@ namespace PetrolStation
         private static readonly double fuelCost = 1.5;
         private static double cost;
         private static double commision;
-       
         private static System.Timers.Timer createVechile;
         private static System.Timers.Timer refuel;
         private static System.Timers.Timer display;
 
         static void Main(string[] args)
         {
+            string password = System.IO.File.ReadAllText(@"../../../login.txt");
             Console.ForegroundColor = ConsoleColor.DarkYellow;        
             Console.WriteLine("Welcome to Broken Petrol Ltd");
             Console.WriteLine("\n\n");
             Console.WriteLine("Please login to continue");
             string login = Console.ReadLine();
 
-            if (login =="123")
+            if (login == password)
             {
                 correctPin = true;
             }
@@ -50,7 +49,8 @@ namespace PetrolStation
                     Console.WriteLine("\n");
                     Console.WriteLine("Incorrect pin, please try again...");
                     string input = Console.ReadLine();
-                    if (input == "123")
+
+                    if (input == password)
                     {
                         correctPin = true;
                     }
@@ -86,6 +86,14 @@ namespace PetrolStation
                         if (userInput.ToLower() == "quit")
                         {
                             running = false;
+                            Console.WriteLine("Closing application...");
+                            File.WriteAllText(@"../../../output.txt", "Daily report: \n\n" +
+                            $"Litres dispensed: {litresDispensed} \n" +
+                            $"Fuel cost: £ {cost}\n" +
+                            $"1%: £ {commision}\n" +
+                            $"Vehicles serviced: {carsServed} \n" +
+                            $"Left early {carsLeftEarly}\n");    
+
                         }
                         
                         avaliablePumps -= 1;
@@ -96,16 +104,18 @@ namespace PetrolStation
                         Console.WriteLine(new string('#', 80));
 
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.WriteLine(
+                        var output = 
                             $"Queue: {carsQueue} \n" +
                             //$"Cars: {carsCreated} \n" +
-                            $"Litres sold: {litresDispensed} \n" +
-                            $"Cost: £ {cost}\n" +
+                            $"Litres dispensed: {litresDispensed} \n" +
+                            $"Fuel cost: £ {cost}\n" +
                             $"1%: £ {commision}\n" +
                             $"Vehicles serviced: {carsServed} \n" +
                             $"Avaliable pumps: {avaliablePumps} \n" +
-                            $"Left early {carsLeftEarly}"
-                            );
+                            $"Left early {carsLeftEarly}\n"
+                            ;
+
+                        Console.WriteLine(output);
 
                     } while (running);
                 }
@@ -151,8 +161,8 @@ namespace PetrolStation
             Console.WriteLine(
                 $"Queue: {carsQueue} \n" +
                 //$"Cars: {carsCreated} \n" +
-                $"Litres sold: {litresDispensed} \n" +
-                $"Cost: £ {cost}\n" +
+                $"Litres dispensed: {litresDispensed} \n" +
+                $"Fuel cost: £ {cost}\n" +
                 $"1%: £ {commision}\n" +
                 $"Vehicles serviced: {carsServed} \n" +
                 $"Avaliable pumps: {avaliablePumps} \n" +
@@ -164,9 +174,14 @@ namespace PetrolStation
         {
             Random random = new Random();
             int newVehicle = random.Next(1500, 2200);
-
             createVechile.Interval = newVehicle;
-            if (carsQueue >=1)
+
+            //if (avaliablePumps==0)
+            //{
+            //    carsQueue += 1;
+            //}
+
+            if (carsQueue >5)
             {
                 carsCreated += 1;
                 carsLeftEarly += 1;
@@ -177,7 +192,6 @@ namespace PetrolStation
                 carsQueue += 1;
             }
             
-            //Console.WriteLine($"Vehicle created after {newVehicle/1000} seconds");
         }
 
         private static void RefuelTimer(Object source, ElapsedEventArgs e)
@@ -185,7 +199,6 @@ namespace PetrolStation
             Random random = new Random();
             int refuelTime = random.Next(3000, 5000);
             refuel.Interval = refuelTime;
-            //Console.WriteLine($"Vehicle refueled after {refuelTime/1000} seconds");
 
             double fuelDispensed = 1.5 * (refuelTime/1000);
             litresDispensed += fuelDispensed;
@@ -205,3 +218,6 @@ namespace PetrolStation
         }
     }
 }
+
+
+
