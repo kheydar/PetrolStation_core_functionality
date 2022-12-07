@@ -28,10 +28,16 @@ namespace PetrolStation
             Console.ForegroundColor = ConsoleColor.DarkYellow;        
             Console.WriteLine("Welcome to Broken Petrol Ltd");
             Console.WriteLine("\n\n");
-            Console.WriteLine("Please login to continue");
+            Console.WriteLine("Please login to continue or type 'quit' to close the program");
             string login = Console.ReadLine();
 
-            if (login == password)
+            if (login.ToLower() == "quit")
+            {
+                Console.WriteLine("Closing application...");
+                System.Environment.Exit(1);
+            }
+
+            else if (login == password)
             {
                 correctPin = true;
             }
@@ -80,7 +86,7 @@ namespace PetrolStation
                         }
 
                         Console.ResetColor();
-                        Console.WriteLine("New vehicle arrived, please select pump or type 'quit' to close the program'");
+                        Console.WriteLine("New vehicle arrived, please select pump or type 'quit' to close the program");
                         string userInput = Console.ReadLine();
 
                         if (userInput.ToLower() == "quit")
@@ -186,6 +192,7 @@ namespace PetrolStation
                 carsCreated += 1;
                 carsLeftEarly += 1;
             }
+
             else
             {
                 carsCreated += 1;
