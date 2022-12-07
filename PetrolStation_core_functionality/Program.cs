@@ -58,8 +58,11 @@ namespace PetrolStation
                         if (userInput.ToLower() == "quit")
                         {
                             running = false;
+                            string time = DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss");
                             Console.WriteLine("Closing application...");
-                            File.WriteAllText(@"../../../output.txt", "Daily report: \n\n" +
+
+                            File.WriteAllText(@"../../../output_"+time+".txt", "Daily report: \n\n" +
+
                             $"Litres dispensed: {litresDispensed} \n" +
                             $"Fuel cost: £ {cost}\n" +
                             $"1%: £ {commision}\n" +
@@ -91,10 +94,12 @@ namespace PetrolStation
 
                     } while (running);
                 }
-            }
+        }
+
         private static void Login()
         {
             string password = System.IO.File.ReadAllText(@"../../../login.txt");
+            Console.ResetColor();
             Console.WriteLine("Please login to continue or type 'quit' to close the program");
             string login = Console.ReadLine();
 
