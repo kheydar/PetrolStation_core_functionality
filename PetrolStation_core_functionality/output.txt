@@ -1,6 +1,7 @@
 Daily report: 
-Litres sold: 0 
-Cost: £ 0
+
+Litres dispensed: 0 
+Fuel cost: £ 0
 1%: £ 0
 Vehicles serviced: 0 
 Left early 0

@@ -24,45 +24,11 @@ namespace PetrolStation
 
         static void Main(string[] args)
         {
-            string password = System.IO.File.ReadAllText(@"../../../login.txt");
             Console.ForegroundColor = ConsoleColor.DarkYellow;        
             Console.WriteLine("Welcome to Broken Petrol Ltd");
             Console.WriteLine("\n\n");
-            Console.WriteLine("Please login to continue or type 'quit' to close the program");
-            string login = Console.ReadLine();
 
-            if (login.ToLower() == "quit")
-            {
-                Console.WriteLine("Closing application...");
-                System.Environment.Exit(1);
-            }
-
-            else if (login == password)
-            {
-                correctPin = true;
-            }
-
-            else
-            {
-                correctPin = false;
-            }
-
-            if (!correctPin)
-            {
-                do
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\n");
-                    Console.WriteLine("Incorrect pin, please try again...");
-                    string input = Console.ReadLine();
-
-                    if (input == password)
-                    {
-                        correctPin = true;
-                    }
-                    
-                } while (!correctPin);
-            }
+            Login();
 
             if (correctPin)
                 {
@@ -125,7 +91,53 @@ namespace PetrolStation
 
                     } while (running);
                 }
-            }   
+            }
+        private static void Login()
+        {
+            string password = System.IO.File.ReadAllText(@"../../../login.txt");
+            Console.WriteLine("Please login to continue or type 'quit' to close the program");
+            string login = Console.ReadLine();
+
+            if (login.ToLower() == "quit")
+            {
+                Console.WriteLine("Closing application...");
+                System.Environment.Exit(1);
+            }
+
+            else if (login == password)
+            {
+                correctPin = true;
+            }
+
+            else
+            {
+                correctPin = false;
+            }
+
+            if (!correctPin)
+            {
+                do
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n");
+                    Console.WriteLine("Incorrect pin, please try again... or type 'quit' to close the program");
+                    string input = Console.ReadLine();
+
+                    if (input.ToLower() == "quit")
+                    {
+                        Console.WriteLine("Closing application...");
+                        System.Environment.Exit(1);
+                    }
+
+                    else if (input == password)
+                    {
+                        correctPin = true;
+                    }
+
+                } while (!correctPin);
+            }
+        }
+
 
         private static void Display()
         {
@@ -182,10 +194,11 @@ namespace PetrolStation
             int newVehicle = random.Next(1500, 2200);
             createVechile.Interval = newVehicle;
 
-            //if (avaliablePumps==0)
-            //{
-            //    carsQueue += 1;
-            //}
+            if (avaliablePumps == 0)
+            {
+                carsCreated += 1;
+                carsQueue += 1;
+            }
 
             if (carsQueue >5)
             {
